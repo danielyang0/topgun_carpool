@@ -7,7 +7,8 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 50%;
+        width: 100%; 
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -28,10 +29,12 @@
                  <option value='3'>3</option>
                  <option value='4'>4</option>
                  </select> </td></tr>
-                 <tr><td><input type='button' value='Cancel'/></td><td><input type='button' value='Confirm' onclick='saveData()'/></td></tr>
+      <tr><td>latitude:</td><td><input type='text' id='lat' /> </td></tr>
+      <tr><td>longitude:</td><td><input type='text' id='lng' /> </td></tr>
+      <tr><td><input type='button' value='Cancel'/></td><td><input type='button' value='Confirm' onclick='saveData()'/></td></tr>
       </table>
     </div>
-    <div id="message">Location saved</div>
+    <!--<div id="message">Location saved</div>-->
     <script>
       var map;
       var markers = [];
@@ -45,14 +48,6 @@
           zoom: 15
         });
 
-        infowindow = new google.maps.InfoWindow({
-          content: document.getElementById('form')
-        });
-
-        messagewindow = new google.maps.InfoWindow({
-          content: document.getElementById('message')
-        });
-
         google.maps.event.addListener(map, 'click', function(event) {
           if(markers.length == 1) {
           	markers[0].setMap(null);
@@ -63,10 +58,10 @@
             map: map
           });
 		  markers.push(marker);
-
-          google.maps.event.addListener(marker, 'click', function() {
-            infowindow.open(map, marker);
-          });
+		  var lat = document.getElementById('lat');
+		  var latlng = markers[0].getPosition();
+          lat.value=latlng.lat();
+          lng.value=latlng.lng();
         });
         
         currInfoWindow = new google.maps.InfoWindow;
