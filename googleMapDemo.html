@@ -1,0 +1,124 @@
+<!DOCTYPE html >
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>From Info Windows to a Database: Saving User-Added Form Data</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" height="460px" width="100%"></div>
+    <div id="form">
+      <table>
+      <tr><td>Time:</td> <td><input type='datetime-local' id='time'/> </td> </tr>
+      <tr><td>Max Attendance:</td> <td><select id='attendance'> +
+                 <option value='1' SELECTED>1</option>
+                 <option value='2'>2</option>
+                 <option value='3'>3</option>
+                 <option value='4'>4</option>
+                 </select> </td></tr>
+                 <tr><td><input type='button' value='Cancel'/></td><td><input type='button' value='Confirm' onclick='saveData()'/></td></tr>
+      </table>
+    </div>
+    <div id="message">Location saved</div>
+    <script>
+      var map;
+      var markers = [];
+      var infowindow;
+      var messagewindow;
+
+      function initMap() {
+        var california = {lat: 37.4419, lng: -122.1419};
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: california,
+          zoom: 15
+        });
+
+        infowindow = new google.maps.InfoWindow({
+          content: document.getElementById('form')
+        });
+
+        messagewindow = new google.maps.InfoWindow({
+          content: document.getElementById('message')
+        });
+
+        google.maps.event.addListener(map, 'click', function(event) {
+          if(markers.length == 1) {
+          	markers[0].setMap(null);
+          }
+          markers = [];
+          var marker = new google.maps.Marker({
+            position: event.latLng,
+            map: map
+          });
+		  markers.push(marker);
+
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+          });
+        });
+        
+        currInfoWindow = new google.maps.InfoWindow;
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+			var currLatLng = new google.maps.LatLng(pos.lat,pos.lng);
+		  var marker = new google.maps.Marker({
+		    position: currLatLng,
+		    icon: {
+		      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+		      scale: 5
+		    },
+		    draggable: true,
+		    map: map
+		  });
+
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, currInfoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, currInfoWindow, map.getCenter());
+        }
+      }
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+
+      function saveData() {
+        var time = document.getElementById('time').value;
+        var attendance = document.getElementById('attendance').value;
+        var latlng = markers[0].getPosition();
+        alert('latitude: '+latlng.lat());
+        alert('longitude: '+ latlng.lng());
+        alert('time: '+time+'  max attentance: '+attendance);
+      }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdRxq9UR0bm3ORAE_GAxYyOrIzdwNQ0dw&callback=initMap">
+    </script>
+  </body>
+</html>
