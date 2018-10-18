@@ -9,7 +9,12 @@ function onLogin() {
         localStorage.setItem("userName", usr);
         localStorage.setItem("userData", data);
         window.location.href = "../";
-    }).fail(function (xhr, status, error) {
+    }).fail(function(xhr, status, error){
         console.log(xhr.statusText);
+        loginErrorFunction();
     });
+}
+
+function loginErrorFunction() {
+    $("#login_error").text("login error");  
 }
