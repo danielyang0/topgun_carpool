@@ -16,12 +16,12 @@ var name;
 
 app.get('/', function(req, res) {
     console.log("Got a GET request for leaderboard.");
-    res.sendFile(__dirname + "/googleMapDemo.html");
+    res.sendFile(__dirname + "/login.html");
 });
 
 app.get('/', function(req, res) {
     console.log("Got a GET request for about.");
-    res.sendFile(__dirname + "/googleMapDemo.html");
+    res.sendFile(__dirname + "/lgin.html");
 });
 
 /* Server stuff */
