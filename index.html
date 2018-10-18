@@ -136,6 +136,22 @@
           zoom: 15
         });
 
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var locations = [
+          {lat: 37.7723, lng: -122.440}
+        ]
+        var matchedMarkers = locations.map(function(location, i) {
+            return new google.maps.Marker({
+              position: location,
+              label: labels[i % labels.length]
+          });
+        });
+
+          // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, matchedMarkers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+
         google.maps.event.addListener(map, 'click', function(event) {
           if(markers.length == 1) {
             markers[0].setMap(null);
@@ -195,6 +211,8 @@
         alert('time: '+time+'  max attentance: '+attendance);
       }
 
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdRxq9UR0bm3ORAE_GAxYyOrIzdwNQ0dw&callback=initMap">
