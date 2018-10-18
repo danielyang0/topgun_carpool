@@ -8,7 +8,7 @@
        * element that contains the map. */
       #map {
         height: 50%;
-        width: 100%; 
+        width: 100%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -48,6 +48,22 @@
           zoom: 15
         });
 
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var locations = [
+          {lat: 37.7723, lng: -122.440}
+        ]
+        var matchedMarkers = locations.map(function(location, i) {
+            return new google.maps.Marker({
+              position: location,
+              label: labels[i % labels.length]
+          });
+        });
+
+          // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, matchedMarkers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+
         google.maps.event.addListener(map, 'click', function(event) {
           if(markers.length == 1) {
           	markers[0].setMap(null);
@@ -63,7 +79,7 @@
           lat.value=latlng.lat();
           lng.value=latlng.lng();
         });
-        
+
         currInfoWindow = new google.maps.InfoWindow;
 
         // Try HTML5 geolocation.
@@ -85,7 +101,7 @@
 		    map: map
 		  });
 
-            map.setCenter(pos);
+        map.setCenter(pos);
           }, function() {
             handleLocationError(true, currInfoWindow, map.getCenter());
           });
@@ -111,6 +127,13 @@
         alert('time: '+time+'  max attentance: '+attendance);
       }
 
+
+
+
+
+
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdRxq9UR0bm3ORAE_GAxYyOrIzdwNQ0dw&callback=initMap">
