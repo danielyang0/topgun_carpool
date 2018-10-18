@@ -53,12 +53,14 @@ function initMap() {
             };
 
             // Create a marker for each place.
-            searchMarkers.push(new google.maps.Marker({
+            var marker = new google.maps.Marker({
               map: map,
               icon: icon,
               title: place.name,
               position: place.geometry.location
-            }));
+            });
+            searchMarkers.push(marker);
+            selectMarker(marker);
 
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
@@ -70,16 +72,17 @@ function initMap() {
           map.fitBounds(bounds);
         });
 
-  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  locations = [
-  {lat: 37.7723, lng: -122.440}
-  ]
-  var matchedMarkers = locations.map(function(location, i) {
-    return new google.maps.Marker({
-      position: location,
-      label: labels[i % labels.length]
-    });
-  });
+//lables
+      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      locations = [
+      {lat: 37.7723, lng: -122.440}
+      ]
+      var matchedMarkers = locations.map(function(location, i) {
+        return new google.maps.Marker({
+          position: location,
+          label: labels[i % labels.length]
+        });
+      });
 
           // Add a marker clusterer to manage the markers.
           var markerCluster = new MarkerClusterer(map, matchedMarkers,
@@ -87,18 +90,28 @@ function initMap() {
 
 
           google.maps.event.addListener(map, 'click', function(event) {
-            if(markers.length == 1) {
-              markers[0].setMap(null);
-            }
-            markers = [];
+            // if(markers.length == 1) {
+            //   markers[0].setMap(null);
+            // }
+            // markers = [];
             var marker = new google.maps.Marker({
               position: event.latLng,
               map: map
             });
-            markers.push(marker);
+            selectMarker(marker);
+            // markers.push(marker);
           });
 
           currInfoWindow = new google.maps.InfoWindow;
+
+
+        function selectMarker(marker) {
+            if(markers.length == 1) {
+              markers[0].setMap(null);
+            }
+            markers = [];
+            markers.push(marker);
+        }
 
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -118,6 +131,7 @@ function initMap() {
               draggable: true,
               map: map
             });
+            selectMarker(marker);
 
             map.setCenter(pos);
           }, function() {
@@ -137,10 +151,10 @@ function initMap() {
       }
 
       function saveData() {
-        var time = document.getElementById('time').value;
-        var attendance = document.getElementById('attendance').value;
+        // var time = document.getElementById('time').value;
+        // var attendance = document.getElementById('attendance').value;
         var latlng = markers[0].getPosition();
         alert('latitude: '+latlng.lat());
         alert('longitude: '+ latlng.lng());
-        alert('time: '+time+'  max attentance: '+attendance);
+        // alert('time: '+time+'  max attentance: '+attendance);
       }
