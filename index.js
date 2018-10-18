@@ -61,10 +61,13 @@ function onPostBtn() {
         alert("Please select a day");
         return;
     }
+    var latlng = markers[0].getPosition();
+    // alert(latlng.lat());
+    // alert(latlng.lng());
     var data = {};
     data.userName = userData.userName;
-    data.latitude = 0;
-    data.longitude = 0;
+    data.latitude = latlng.lat();
+    data.longitude = latlng.lng();
     data.number = $("#number").val();
     data.available = data.number;
     data.time = $("#time").val();
