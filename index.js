@@ -218,8 +218,9 @@ function createPostCell(post, node) {
 function onLogin() {
     if (isLogin()) {
         userData = {};
-        localStorage.removeItem("session");
-        localStorage.removeItem("userData");
+        localStorage.removeItem("sessionID");
+        localStorage.removeItem("sessionTime");
+        localStorage.removeItem("userName");
         location.reload();
     } else {
         window.location.href = "/login.html";
