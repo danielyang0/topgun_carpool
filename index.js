@@ -156,7 +156,7 @@ function createSearchCell(srcPost, post, node) {
         labels[0] + '<br/>' +
         labels[1] + '<br/>' +
         post.time + '    ' + labels[2];
-    if (srcPost.match != "") {
+    if (srcPost.matchs != "") {
         str += '<span class="badge badge-primary badge-pill">Matched</span></div>';
     } else {
         var state = 0;
@@ -216,8 +216,8 @@ function createPostCell(post, node) {
 }
 
 function onLogin() {
-    if (runTimeData.login) {
-        userData = { "login": false };
+    if (isLogin()) {
+        userData = {};
         localStorage.removeItem("session");
         localStorage.removeItem("userData");
         location.reload();
@@ -264,8 +264,4 @@ function onTypeChanged() {
 
 function onNumberChanged() {
     $("#numberLabel").text($("#number").val());
-}
-
-function onPost() {
-
 }
