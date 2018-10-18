@@ -17,6 +17,7 @@ function refreshData() {
         return;
     }
     $.post("/refresh", { "sessionID": localStorage.getItem("sessionID"), "userName": localStorage.getItem("userName") }, function (data, s, xhr) {
+        // console.log(data);
         userData = JSON.parse(data);
         var refreshMatch = false;
         refreshPostList();
@@ -142,11 +143,39 @@ function onClickInvite(index) {
     var toPost = runTimeData.displayMatch[index];
     var sender = runTimeData.displayPost[runTimeData.selectedPost];
     $.post("/invite", { "sender": sender.id, "to": toPost.id }, function (data, s, xhr) {
-
+        userData = JSON.parse(data);
+        refreshPostList();
+        refreshMatchList();
     }).fail(function (xhr, error, s) {
 
     });
 }
+
+function onClickYes(index) {
+    var toPost = runTimeData.displayMatch[index];
+    var sender = runTimeData.displayPost[runTimeData.selectedPost];
+    $.post("/response", { "sender": sender.id, "to": toPost.id, "accept": true }, function (data, s, xhr) {
+        userData = JSON.parse(data);
+        refreshPostList();
+        refreshMatchList();
+    }).fail(function (xhr, error, s) {
+
+    });
+}
+
+function onClickNo(index) {
+    var toPost = runTimeData.displayMatch[index];
+    var sender = runTimeData.displayPost[runTimeData.selectedPost];
+    $.post("/response", { "sender": sender.id, "to": toPost.id, "accept": false }, function (data, s, xhr) {
+        userData = JSON.parse(data);
+        refreshPostList();
+        refreshMatchList();
+    }).fail(function (xhr, error, s) {
+
+    });
+}
+
+
 
 function createSearchCell(srcPost, post, node) {
     var index = runTimeData.displayMatch.length;
@@ -156,8 +185,14 @@ function createSearchCell(srcPost, post, node) {
         labels[0] + '<br/>' +
         labels[1] + '<br/>' +
         post.time + '    ' + labels[2];
-    if (srcPost.matchs != "") {
-        str += '<span class="badge badge-primary badge-pill">Matched</span></div>';
+
+    if (srcPost.matchs.length != 0){
+        for (var k in srcPost.matchs){
+            var inv = srcPost.matchs[k];
+            if( inv == post.id){
+               str += '<span class="badge badge-primary badge-pill">Matched</span></div>';
+             }
+         }
     } else {
         var state = 0;
         for (var k in userData.invites) {
@@ -166,14 +201,14 @@ function createSearchCell(srcPost, post, node) {
                 state = 1;
                 break;
             } else if (inv.sender == post.id && inv.receiver == srcPost.id) {
-                state == 2;
+                state = 2;
                 break;
             }
         }
         if (state == 0) {
-            str += '<button class="btn btn-primary" onclick="onClickInvite(' + index + ')">invite</button></div>';
+            str += '<button class="btn btn-primary" onclick="onClickInvite(' + index + ')">Invite</button></div>';
         } else if (state == 1) {
-            str += '</div>';
+            str += '<span class="badge badge-success badge-lg">Waiting</span></div>';
         } else {
             str += '<div class="btn-group-vertical">\
                 <button type="button" class="btn btn-success btn-sm" onclick="onClickYes(' + index + ')">Accept</button>\
