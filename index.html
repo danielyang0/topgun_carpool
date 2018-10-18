@@ -20,70 +20,97 @@
 </head>
 
 <body onload="onLoad()">
-
     <nav class="navbar navbar-expand-sm justify-content-end bg-info navbar-dark">
         <ul class="navbar-nav">
+            <span class="navbar-text" id="userLabel"></span>
             <li class="nav-item active">
-                <a class="nav-link" href="login.html">Login</a>
+                <button class="btn btn-info" id="login" onclick="onLogin()">Login</button>
             </li>
         </ul>
     </nav>
     <div class="container-fluid">
-        <h1>Google map</h1>
-    </div>
-    <div class="container-fluid">
-        <form>
-            <div class="form-group row">
-                <label for="date" class="col-sm-2 col-form-label">Date:</label>
-                <div class="col-sm-5">
-                    <input type="date" class="form-control" id="date">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="time" class="col-sm-2 col-form-label">Time:</label>
-                <div class="col-sm-5">
-                    <select class="form-control" id="time">
-                    </select>
-                </div>
-            </div>
-            <fieldset class="form-group">
-                <div class="row">
-                    <legend class="col-form-label col-sm-2 pt-0">I'm a</legend>
-                    <div class="col-sm-10">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="idType" id="driver" onchange="onTypeChanged()">
-                            <label class="form-check-label" for="driver">
-                                driver
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="idType" id="passenger" onchange="onTypeChanged()">
-                            <label class="form-check-label" for="passenger">
-                                passenger
-                            </label>
+        <div class="row">
+            <h1>Google map</h1>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group row">
+                    <label for="date" class="col-sm-2 col-form-label">Weekdays:</label>
+                    <div class="col-sm-5" id="date">
+                        <div class="btn-group" id="days">
+                            <button type="button" class="btn btn-outline-primary" data-toggle="button" onclick="onDayBtn(0)">Mon.</button>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="button" onclick="onDayBtn(1)">Tue.</button>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="button" onclick="onDayBtn(2)">Wed.</button>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="button" onclick="onDayBtn(3)">Thr.</button>
+                            <button type="button" class="btn btn-outline-primary" data-toggle="button" onclick="onDayBtn(4)">Fri.</button>
                         </div>
                     </div>
                 </div>
-            </fieldset>
-            <div class="form-group row">
-                <div class="col-sm-2" id="numberType">Available seats:</div>
-                <div class="col-sm-4">
-                    <input class="form-control" type="range" min="1" max="4" id="number" onchange="onNumberChanged()">
+                <div class="form-group row">
+                    <label for="time" class="col-sm-2 col-form-label">Time:</label>
+                    <div class="col-sm-5">
+                        <select class="form-control" id="time">
+                        </select>
+                    </div>
                 </div>
-                <label class="col-sm-1 col-form-label" id="numberLabel">1</label>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-10">
-                    <button class="btn btn-primary">Submit</button>
+                <fieldset class="form-group">
+                    <div class="row">
+                        <legend class="col-form-label col-sm-2 pt-0">I'm a</legend>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="idType" id="driver" onchange="onTypeChanged()">
+                                <label class="form-check-label" for="driver">
+                                    driver
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="idType" id="passenger" onchange="onTypeChanged()">
+                                <label class="form-check-label" for="passenger">
+                                    passenger
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="form-group row">
+                    <div class="col-sm-2" id="numberType">Available seats:</div>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="range" min="1" max="4" id="number" onchange="onNumberChanged()">
+                    </div>
+                    <label class="col-sm-1 col-form-label" id="numberLabel">1</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button class="btn btn-primary" onclick="onPostBtn()">Submit</button>
+                    </div>
                 </div>
             </div>
-        </form>
-    </div>
-
-    <div class="wrapper">
-        <ul class="list-unstyled components">
-
-        </ul>
+            <div class="col-3 pre-scrollable" id="postList">
+                <!--<div class="list-group-item d-flex justify-content-between align-items-center" onclick="onClickPost(1)">
+                    driver: dadfl<br />
+                    Mon,Tue<br />
+                    6:00 am 4 seats
+                    <span class="badge badge-primary badge-pill">1</span>
+                </div>-->
+            </div>
+            <div class="col-3 pre-scrollable" id="matchList">
+                <!--<div class="list-group-item d-flex justify-content-between align-items-center">
+                    driver: dlff<br />
+                    Mon,Tue<br />
+                    6:00 am 4 seats
+                    <button class="btn btn-primary" onclick="onClickInvite(1)">invite</button>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    driver: dlff<br />
+                    Mon,Tue<br />
+                    6:00 am 4 seats
+                    <div class="btn-group-vertical">
+                        <button type="button" class="btn btn-success btn-sm" onclick="onClickYes(1)">Accept</button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="onClickNo(1)">Reject</button>
+                    </div>
+                </div>-->
+            </div>
+        </div>
     </div>
 </body>
 
