@@ -2,12 +2,13 @@ function onLogin() {
     var usr = $("#userName").val();
     var pass = $("#pass").val();
     $.post("/login", { "userName": usr, "password": pass, "isDriver": true }, function (data, status, xhr) {
+        var dataObj = JSON.parse(data);
         var now = new Date();
         now = now.getTime();
         now += 3600000;
-        localStorage.setItem("session", now.toString());
-        localStorage.setItem("userName", usr);
-        localStorage.setItem("userData", data);
+        localStorage.setItem("sessionTime", now.toString());
+        localStorage.setItem("sessionID", data.sessionID);
+        localStorage.setItem("userName", data.userName);
         window.location.href = "../";
     }).fail(function(xhr, status, error){
         console.log(xhr.statusText);
