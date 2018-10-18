@@ -7,8 +7,8 @@ function onLogin() {
         now = now.getTime();
         now += 3600000;
         localStorage.setItem("sessionTime", now.toString());
-        localStorage.setItem("sessionID", data.sessionID);
-        localStorage.setItem("userName", data.userName);
+        localStorage.setItem("sessionID", dataObj.sessionID);
+        localStorage.setItem("userName", dataObj.userName);
         window.location.href = "../";
     }).fail(function(xhr, status, error){
         console.log(xhr.statusText);

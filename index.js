@@ -1,6 +1,39 @@
 var userData = {};
 var days = ["Mon.", "Tue.", "Wed.", "Thu.", "Fri."];
-var runTimeData = { "days": [false, false, false, false, false], "selectedPost":-1};
+var runTimeData = { "days": [false, false, false, false, false], "selectedPost": -1 };
+
+function isLogin() {
+    var timeStamp = (new Date()).getTime();
+    var sessionTime = localStorage.getItem("sessionTime");
+    if (sessionTime != null) {
+        sessionTime = parseInt(sessionTime);
+        return timeStamp < sessionTime;
+    }
+    return false;
+}
+
+function refreshData() {
+    if (!isLogin()) {
+        return;
+    }
+    $.post("/refresh", { "sessionID": localStorage.getItem("sessionID"), "userName": localStorage.getItem("userName") }, function (data, s, xhr) {
+        userData = JSON.parse(data);
+        var refreshMatch = false;
+        refreshPostList();
+        if (runTimeData.selectedPost < 0) {
+            if (userData.post.length > 0) {
+                onClickPost(0);
+                refreshMatch = true;
+            }
+        }
+        if (!refreshMatch) {
+            refreshMatchList();
+        }
+        setTimeout(refreshData, 10000);
+    }).fail(function (xhr, error, s) {
+        setTimeout(refreshData, 10000);
+    });
+}
 
 function onLoad() {
     var now = new Date();
@@ -8,19 +41,11 @@ function onLoad() {
     $("#number").val("1");
     onTypeChanged();
     onNumberChanged();
-    var timeStamp = now.getTime();
-    var login = false;
-    var session = localStorage.getItem("session");
-    if (session != null) {
-        session = parseInt(session);
-        login = timeStamp < session;
-    }
+    var login = isLogin();
     $("#login").text(login ? "Logout" : "Login");
     if (login) {
-        userData = JSON.parse(localStorage.getItem("userData"));
-        $("#userLabel").text("Welcome " + userData.userName);
+        $("#userLabel").text("Welcome " + localStorage.getItem("userName"));
     }
-    runTimeData.login = login;
     appendTimeSelection(now);
     var min = now.toISOString().substr(0, 10);
     now.setMonth(now.getMonth() + 1);
@@ -29,9 +54,7 @@ function onLoad() {
     dl.val(min);
     dl.prop("min", min);
     dl.prop("max", max);
-    runTimeData.selectedPost = userData.post.length > 0? 0: -1;
-    refreshPostList();
-    refreshMatchList();
+    refreshData();
 }
 
 function onDayBtn(i) {
@@ -94,7 +117,7 @@ function search(id) {
 }
 
 function onClickPost(i) {
-    if(runTimeData.selectedPost >= 0){
+    if (runTimeData.selectedPost >= 0) {
         $("#postList :nth-child(" + (runTimeData.selectedPost + 1) + ")").removeClass("bg-primary text-white");
     }
     runTimeData.selectedPost = i;
@@ -115,12 +138,12 @@ function refreshMatchList() {
     }
 }
 
-function onClickInvite(index){
+function onClickInvite(index) {
     var toPost = runTimeData.displayMatch[index];
     var sender = runTimeData.displayPost[runTimeData.selectedPost];
-    $.post("/invite", {"sender":sender.id, "to":toPost.id}, function(data, s, xhr){
+    $.post("/invite", { "sender": sender.id, "to": toPost.id }, function (data, s, xhr) {
 
-    }).fail(function(xhr, error, s){
+    }).fail(function (xhr, error, s) {
 
     });
 }
