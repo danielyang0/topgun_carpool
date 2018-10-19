@@ -21,15 +21,7 @@ function refreshData() {
         userData = JSON.parse(data);
         var refreshMatch = false;
         refreshPostList();
-        if (runTimeData.selectedPost < 0) {
-            if (userData.post.length > 0) {
-                onClickPost(0);
-                refreshMatch = true;
-            }
-        }
-        if (!refreshMatch) {
-            refreshMatchList();
-        }
+        refreshMatchList();
         setTimeout(refreshData, 10000);
     }).fail(function (xhr, error, s) {
         setTimeout(refreshData, 10000);
@@ -72,6 +64,10 @@ function refreshPostList() {
             createPostCell(p, node);
         }
     }
+    if (runTimeData.selectedPost < 0 && runTimeData.displayPost.length > 0) {
+        runTimeData.selectedPost = 0;
+    }
+    $("#postList :nth-child(" + (runTimeData.selectedPost + 1) + ")").addClass("bg-primary text-white");
 }
 
 function onPostBtn() {
@@ -118,12 +114,14 @@ function search(id) {
 }
 
 function onClickPost(i) {
-    if (runTimeData.selectedPost >= 0) {
-        $("#postList :nth-child(" + (runTimeData.selectedPost + 1) + ")").removeClass("bg-primary text-white");
+    if (runTimeData.selectedPost != i) {
+        if (runTimeData.selectedPost >= 0) {
+            $("#postList :nth-child(" + (runTimeData.selectedPost + 1) + ")").removeClass("bg-primary text-white");
+        }
+        runTimeData.selectedPost = i;
+        $("#postList :nth-child(" + (i + 1) + ")").addClass("bg-primary text-white");
+        refreshMatchList();
     }
-    runTimeData.selectedPost = i;
-    $("#postList :nth-child(" + (i + 1) + ")").addClass("bg-primary text-white");
-    refreshMatchList();
 }
 
 function refreshMatchList() {
@@ -136,7 +134,7 @@ function refreshMatchList() {
         locations = [];
         for (var i in list) {
             createSearchCell(post, list[i], node);
-            locations.push({lat: list[i].latitude, lng: list[i].longitude});
+            locations.push({ lat: list[i].latitude, lng: list[i].longitude });
         }
         // console.log(locations.length);
         refreshMatchedMarkers();
@@ -153,6 +151,20 @@ function onClickInvite(index) {
     }).fail(function (xhr, error, s) {
 
     });
+}
+
+function distance(lat1, lat2, long1, long2) {
+    var rad = Math.PI / 180;
+    lat1 *= rad;
+    lat2 *= rad;
+    long1 *= rad;
+    long2 *= rad;
+    var a = lat1 - lat2;
+    var b = long1 - long2;
+    a = Math.sin(a / 2);
+    b = Math.sin(b / 2);
+    a = 2 * Math.asin(Math.sqrt(a * a + Math.cos(lat1) * Math.cos(lat2) * b * b));
+    return a * 6378.137 * 0.621371192;
 }
 
 function onClickYes(index) {
@@ -186,7 +198,8 @@ function createSearchCell(srcPost, post, node) {
     var str = '<div class="list-group-item d-flex justify-content-between align-items-center">' +
         labels[0] + '<br/>' +
         labels[1] + '<br/>' +
-        post.time + '    ' + labels[2];
+        labels[2] + "<br/>" +
+        distance(srcPost.latitude, post.latitude, srcPost.longitude, post.longitude).toFixed(2) + " mile";
 
     if (srcPost.matchs.length != 0) {
         for (var k in srcPost.matchs) {
@@ -231,8 +244,9 @@ function createHtmlCell(post) {
             dayLabel += days[i] + " ";
         }
     }
+    dayLabel += "  " + post.time;
     var numberLabel = post.isDriver ? " seat" : " passenger";
-    numberLabel = post.availableNumber + numberLabel;
+    numberLabel = post.availableNumber + "/" + post.totalNumber + numberLabel;
     if (post.availableNumber > 1) {
         numberLabel += "s";
     }
@@ -245,10 +259,10 @@ function createPostCell(post, node) {
     var labels = createHtmlCell(post);
     var str = '<div class="list-group-item d-flex justify-content-between align-items-center" onclick="onClickPost('
         + index + ')">' +
-        labels[0] + '<br />'
-        + labels[1] + '<br />'
-        + post.time + '   ' + labels[2]
-        + '<span class="badge badge-primary badge-pill">1</span></div>';
+        labels[0] + '<br />' +
+        labels[1] + '<br />'
+        + labels[2];
+    // + '<span class="badge badge-primary badge-pill">1</span></div>';
     node.append(str);
 }
 
