@@ -2,7 +2,7 @@ var map;
 var markers = [];
 var infowindow;
 var messagewindow;
-var locations;
+var locations = [];
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var markerCluster;
 
@@ -18,7 +18,9 @@ function refreshMatchedMarkers() {
 	if(markerCluster != null) {
 		markerCluster.clearMarkers();
 	}
-
+	if(matchedMarkers.length == 0) {
+        return;
+    }
 	markerCluster = new MarkerClusterer(map, matchedMarkers, {
 		imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
 	});
@@ -97,10 +99,10 @@ function initMap() {
 	//lables
 	// var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-	locations = [{
-		lat: 37.7723,
-		lng: -122.440
-	}]
+	// locations = [{
+	// 	lat: 37.7723,
+	// 	lng: -122.440
+	// }]
 	refreshMatchedMarkers();
 
 	google.maps.event.addListener(map, 'click', function(event) {
