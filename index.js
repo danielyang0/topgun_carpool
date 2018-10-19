@@ -152,8 +152,8 @@ function onClickInvite(index) {
 }
 
 function onClickYes(index) {
-    var toPost = runTimeData.displayMatch[index];
-    var sender = runTimeData.displayPost[runTimeData.selectedPost];
+    var sender = runTimeData.displayMatch[index];
+    var toPost = runTimeData.displayPost[runTimeData.selectedPost];
     $.post("/response", { "sender": sender.id, "to": toPost.id, "accept": true }, function (data, s, xhr) {
         userData = JSON.parse(data);
         refreshPostList();
@@ -164,8 +164,8 @@ function onClickYes(index) {
 }
 
 function onClickNo(index) {
-    var toPost = runTimeData.displayMatch[index];
-    var sender = runTimeData.displayPost[runTimeData.selectedPost];
+    var sender = runTimeData.displayMatch[index];
+    var toPost = runTimeData.displayPost[runTimeData.selectedPost];
     $.post("/response", { "sender": sender.id, "to": toPost.id, "accept": false }, function (data, s, xhr) {
         userData = JSON.parse(data);
         refreshPostList();
@@ -174,8 +174,6 @@ function onClickNo(index) {
 
     });
 }
-
-
 
 function createSearchCell(srcPost, post, node) {
     var index = runTimeData.displayMatch.length;
@@ -186,13 +184,13 @@ function createSearchCell(srcPost, post, node) {
         labels[1] + '<br/>' +
         post.time + '    ' + labels[2];
 
-    if (srcPost.matchs.length != 0){
-        for (var k in srcPost.matchs){
+    if (srcPost.matchs.length != 0) {
+        for (var k in srcPost.matchs) {
             var inv = srcPost.matchs[k];
-            if( inv == post.id){
-               str += '<span class="badge badge-primary badge-pill">Matched</span></div>';
-             }
-         }
+            if (inv == post.id) {
+                str += '<span class="badge badge-primary badge-pill">Matched</span></div>';
+            }
+        }
     } else {
         var state = 0;
         for (var k in userData.invites) {
