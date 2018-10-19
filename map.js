@@ -2,7 +2,21 @@ var map;
 var markers = [];
 var infowindow;
 var messagewindow;
-var location;
+var locations;
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      function refreshMatchedMarkers() {
+          matchedMarkers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        });
+
+          // Add a marker clusterer to manage the markers.
+          var markerCluster = new MarkerClusterer(map, matchedMarkers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+      }
 
 function initMap() {
   var california = {lat: 37.4419, lng: -122.1419};
@@ -73,20 +87,22 @@ function initMap() {
         });
 
 //lables
-      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      // var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
       locations = [
       {lat: 37.7723, lng: -122.440}
       ]
-      var matchedMarkers = locations.map(function(location, i) {
-        return new google.maps.Marker({
-          position: location,
-          label: labels[i % labels.length]
-        });
-      });
+      var matchedMarkers;
+      refreshMatchedMarkers();
 
-          // Add a marker clusterer to manage the markers.
-          var markerCluster = new MarkerClusterer(map, matchedMarkers,
-            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+      // var matchedMarkers = locations.map(function(location, i) {
+      //   return new google.maps.Marker({
+      //     position: location,
+      //     label: labels[i % labels.length]
+      //   });
+      // });
+
+
 
 
           google.maps.event.addListener(map, 'click', function(event) {
