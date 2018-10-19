@@ -7,6 +7,7 @@ var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var markerCluster;
 
 function refreshMatchedMarkers() {
+  // locations.forEach(function(location){console.log(location)});
 	var matchedMarkers = locations.map(function(location, i) {
 		return new google.maps.Marker({
 			position: location,
@@ -108,6 +109,7 @@ function initMap() {
 			map: map
 		});
 		selectMarker(marker);
+    // saveData();
 	});
 
 	currInfoWindow = new google.maps.InfoWindow;
@@ -162,7 +164,7 @@ function saveData() {
 	// var time = document.getElementById('time').value;
 	// var attendance = document.getElementById('attendance').value;
 	var latlng = markers[0].getPosition();
-	alert('latitude: ' + latlng.lat());
-	alert('longitude: ' + latlng.lng());
+	console.log('latitude: ' + latlng.lat());
+	console.log('longitude: ' + latlng.lng());
 	// alert('time: '+time+'  max attentance: '+attendance);
 }

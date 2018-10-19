@@ -136,10 +136,9 @@ function refreshMatchList() {
         locations = [];
         for (var i in list) {
             createSearchCell(post, list[i], node);
-            // locations.push({lat: list[i].latitude, lng: list[i].longitude});
-            locations.push({lat: 37.7762, lng: -122.4516});
+            locations.push({lat: list[i].latitude, lng: list[i].longitude});
         }
-        console.log(locations.length);
+        // console.log(locations.length);
         refreshMatchedMarkers();
     }
 }
