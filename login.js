@@ -17,5 +17,5 @@ function onLogin() {
 }
 
 function loginErrorFunction() {
-    $("#login_error").text("login error");  
+    $("#login_error").show()
 }

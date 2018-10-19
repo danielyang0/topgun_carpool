@@ -13,6 +13,7 @@
 
 <body>
     <div class="container-fluid">
+        <span id="login_error" class="badge badge-danger" style="display: none;">Incorrect user name or password</span>
         <div class="form-group">
             <label for="userName">User name:</label>
             <input type="text" class="form-control" id="userName" />
@@ -22,7 +23,6 @@
             <input type="password" class="form-control" id="pass" />
         </div>
         <button class="btn btn-primary" onclick="onLogin()">Login</button>
-        <p id="login_error"></p>
     </div>
 </body>
 
