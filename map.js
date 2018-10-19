@@ -11,7 +11,7 @@ function refreshMatchedMarkers() {
 	var matchedMarkers = locations.map(function(location, i) {
 		return new google.maps.Marker({
 			position: location,
-			label: labels[i % labels.length]
+			label: (i + 1) + ""//labels[i % labels.length]
 		});
 	});
 	// Add a marker clusterer to manage the markers.

@@ -196,6 +196,7 @@ function createSearchCell(srcPost, post, node) {
     runTimeData.displayMatch.push(post);
     var labels = createHtmlCell(post);
     var str = '<div class="list-group-item d-flex justify-content-between align-items-center">' +
+        '<span class="badge badge-primary badge-pill">' + (index + 1) + '</span>' +
         labels[0] + '<br/>' +
         labels[1] + '<br/>' +
         labels[2] + "<br/>" +
