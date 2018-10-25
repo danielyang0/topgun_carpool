@@ -1,5 +1,7 @@
 # topgun_carpool    
-moved to https://github.com/leejuqiang/sideProject-carpool.git
+moved to 
+https://github.com/leejuqiang/sideProject-carpool
+https://github.com/leejuqiang/sideProject-carpool.git
 
 To run the jar, use command line    
 java -cp carpool.jar topgun.carpool.Main    
